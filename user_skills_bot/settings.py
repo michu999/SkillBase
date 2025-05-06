@@ -56,12 +56,11 @@ WSGI_APPLICATION = 'user_skills_bot.wsgi.application'  # Change 'your_project' t
 # Database
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'skills_db',  # Change this to your actual database name
-        'USER': 'admin',
-        'PASSWORD': 'admin123',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.environ.get(
+            'DJANGO_DB_LOCATION',
+            BASE_DIR / 'db.sqlite3'
+        ),
     }
 }
 
