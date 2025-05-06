@@ -8,7 +8,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # 6. Make entrypoint executable
-RUN chmod +x /code/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
 
 # 7. Default command
 ENTRYPOINT ["/app/entrypoint.sh"]
