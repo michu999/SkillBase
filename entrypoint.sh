@@ -3,7 +3,8 @@ set -e
 
 # 1. Run migrations
 echo "Running migrations…"
-python manage.py migrate --noinput
+python manage.py makemigrations --noinput
+python manage.py migrate --fake-initial --noinput
 
 # Check if DJANGO_DB_LOCATION is set and if the file exists
 if [ -n "$DJANGO_DB_LOCATION" ]; then
