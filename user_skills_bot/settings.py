@@ -11,8 +11,8 @@ SECRET_KEY = 'django-insecure-CHANGE_THIS_TO_YOUR_SECRET_KEY'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'skillbase.smartoakprojects.com', 
-    'https://dev-skillbase-app.kindsea-24ff6f10.swedencentral.azurecontainerapps.io/'
+    'skillbase.smartoakprojects.com',
+    'dev-skillbase-app.kindsea-24ff6f10.swedencentral.azurecontainerapps.io'
     ]
 
 # Application definition
