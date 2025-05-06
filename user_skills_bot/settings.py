@@ -10,7 +10,10 @@ SECRET_KEY = 'django-insecure-CHANGE_THIS_TO_YOUR_SECRET_KEY'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'skillbase.smartoakprojects.com', 
+    'https://dev-skillbase-app.kindsea-24ff6f10.swedencentral.azurecontainerapps.io/'
+    ]
 
 # Application definition
 INSTALLED_APPS = [
