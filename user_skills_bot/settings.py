@@ -11,6 +11,7 @@ SECRET_KEY = 'django-insecure-CHANGE_THIS_TO_YOUR_SECRET_KEY'
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    'localhost',
     'skillbase.smartoakprojects.com',
     'dev-skillbase-app.kindsea-24ff6f10.swedencentral.azurecontainerapps.io'
     ]
@@ -90,8 +91,8 @@ USE_I18N = True
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
-STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_URL = 'staticfiles/'
+STATICFILES_DIRS = [BASE_DIR / 'staticfiles']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Default primary key field type
