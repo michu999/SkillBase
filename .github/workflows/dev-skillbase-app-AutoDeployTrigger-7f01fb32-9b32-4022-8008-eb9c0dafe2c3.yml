@@ -41,7 +41,7 @@ jobs:
           registryPassword: ${{ secrets.NEURONJIRATASKCONNECTORBOT_REGISTRY_PASSWORD }}
           containerAppName: dev-skillbase-app
           resourceGroup: rg-swedencentral-dev-skillbase-app
-          imageToBuild: default/[parameters('containerAppName')]:${{ github.sha }}
+          imageToBuild: neuroncontainerregistry.azurecr.io/dev-skillbase-app:${{ github.sha }}
           _buildArgumentsKey_: |
             _buildArgumentsValues_
 
