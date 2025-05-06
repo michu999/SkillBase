@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from bot import views
 from django.shortcuts import render
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns #TODO REMOVE WHEN GOING LIVE
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,3 +26,5 @@ urlpatterns = [
     path('success/', lambda request: render(request, 'success.html'), name='success'),
     path('', views.user_form_view, name='home'),  # Base URL points to the form
 ]
+
+urlpatterns += staticfiles_urlpatterns()
