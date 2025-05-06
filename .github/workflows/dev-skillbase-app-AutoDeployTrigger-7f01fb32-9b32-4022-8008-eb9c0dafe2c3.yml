@@ -36,9 +36,9 @@ jobs:
         with:
           appSourcePath: ${{ github.workspace }}
           _dockerfilePathKey_: _dockerfilePath_
-          registryUrl: 
-          registryUsername: ${{ secrets.DEVSKILLBASEAPP_REGISTRY_USERNAME }}
-          registryPassword: ${{ secrets.DEVSKILLBASEAPP_REGISTRY_PASSWORD }}
+          registryUrl: neuroncontainerregistry.azurecr.io
+          registryUsername: ${{ secrets.NEURONJIRATASKCONNECTORBOT_REGISTRY_USERNAME }}
+          registryPassword: ${{ secrets.NEURONJIRATASKCONNECTORBOT_REGISTRY_PASSWORD }}
           containerAppName: dev-skillbase-app
           resourceGroup: rg-swedencentral-dev-skillbase-app
           imageToBuild: default/[parameters('containerAppName')]:${{ github.sha }}
