@@ -5,6 +5,20 @@ set -e
 echo "Running migrations…"
 python manage.py migrate --noinput
 
+# Check if DJANGO_DB_LOCATION is set and if the file exists
+if [ -n "$DJANGO_DB_LOCATION" ]; then
+    echo "DJANGO_DB_LOCATION is set to: $DJANGO_DB_LOCATION"
+    if [ -f "$DJANGO_DB_LOCATION" ]; then
+        echo "Database file exists at $DJANGO_DB_LOCATION"
+    else
+        echo "WARNING: Database file does not exist at $DJANGO_DB_LOCATION"
+        exit 2
+    fi
+else
+    echo "DJANGO_DB_LOCATION is not set"
+    exit 1
+fi
+
 # 2. Create superuser if not exists
 if [ -n "$DJANGO_SUPERUSER_USERNAME" ] && [ -n "$DJANGO_SUPERUSER_PASSWORD" ] && [ -n "$DJANGO_SUPERUSER_EMAIL" ]; then
   echo "Checking for existing superuser…"
