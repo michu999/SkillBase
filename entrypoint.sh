@@ -6,6 +6,10 @@ echo "Running migrations…"
 python manage.py makemigrations --noinput
 python manage.py migrate --fake-initial --noinput
 
+# preapre static files
+echo "Collecting static files…"
+python manage.py collectstatic
+
 # Check if DJANGO_DB_LOCATION is set and if the file exists
 if [ -n "$DJANGO_DB_LOCATION" ]; then
     echo "DJANGO_DB_LOCATION is set to: $DJANGO_DB_LOCATION"
