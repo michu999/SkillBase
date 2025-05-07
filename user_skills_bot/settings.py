@@ -16,6 +16,12 @@ ALLOWED_HOSTS = [
     'dev-skillbase-app.kindsea-24ff6f10.swedencentral.azurecontainerapps.io'
     ]
 
+CSRF_TRUSTED_ORIGINS = [
+    'localhost'
+    'https://skillbase.smartoakprojects.com',
+    'https://dev-skillbase-app.kindsea-24ff6f10.swedencentral.azurecontainerapps.io'
+]
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
