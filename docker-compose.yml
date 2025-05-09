@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+      - ./static:/app/static
+      - static_volume:/app/staticfiles
+      - db_data:/app/data
+    environment:
+      - DEBUG=1
+      - DJANGO_SECRET_KEY=your_secret_key_here
+      - DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1
+      - DJANGO_DB_ENGINE=django.db.backends.sqlite3
+      - DJANGO_DB_LOCATION=/app/data/db.sqlite3
+      - DJANGO_SUPERUSER_USERNAME=admin
+      - DJANGO_SUPERUSER_PASSWORD=admin
+      - DJANGO_SUPERUSER_EMAIL=admin@example.com
+      - SLACK_CLIENT_ID=your_slack_client_id
+      - SLACK_CLIENT_SECRET=your_slack_client_secret
+
+volumes:
+  static_volume:
+  db_data:

@@ -15,16 +15,18 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from bot import views
 from django.shortcuts import render
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns #TODO REMOVE WHEN GOING LIVE
 
+
 urlpatterns = [
+    path('', views.landing_page, name='landing.html'),
     path('admin/', admin.site.urls),
-    path('user_form/', views.user_form_view, name='user_form'),
+    path('user_form/', views.user_form_view, name='user_form.html'),
     path('success/', lambda request: render(request, 'success.html'), name='success'),
-    path('', views.user_form_view, name='home'),  # Base URL points to the form
+    path('accounts/', include('allauth.urls')),
 ]
 
 urlpatterns += staticfiles_urlpatterns()

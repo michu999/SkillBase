@@ -13,11 +13,15 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'localhost',
     'skillbase.smartoakprojects.com',
-    'dev-skillbase-app.kindsea-24ff6f10.swedencentral.azurecontainerapps.io'
+    'dev-skillbase-app.kindsea-24ff6f10.swedencentral.azurecontainerapps.io',
+    '127.0.0.1',
+    '127.0.0.1:8000',
+    '*' # Allow all hosts for development purposes DEV ONLY!!!
     ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'localhost'
+    'http://localhost',
+    'https://localhost',
     'https://skillbase.smartoakprojects.com',
     'https://dev-skillbase-app.kindsea-24ff6f10.swedencentral.azurecontainerapps.io'
 ]
@@ -30,8 +34,21 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.slack',
     'bot'
 ]
+
+SITE_ID = 1
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
+LOGIN_REDIRECT_URL = 'user_form/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -41,7 +58,19 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
+    'bot.middleware.SlackLoginRequiredMiddleware'
 ]
+
+LOGIN_URL = '/accounts/slack/login/'
+ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/login/'
+
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']
+ACCOUNT_LOGIN_METHODS = {'email', 'username'}
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']
+ACCOUNT_UNIQUE_EMAIL = True
+SOCIALACCOUNT_AUTO_SIGNUP = True
 
 ROOT_URLCONF = 'user_skills_bot.urls'  # Change 'your_project' to your project name
 
@@ -56,12 +85,32 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
             ],
         },
     },
 ]
 
 WSGI_APPLICATION = 'user_skills_bot.wsgi.application'  # Change 'your_project' to your project name
+
+SOCIALACCOUNT_PROVIDERS = {
+    'slack': {
+        'SCOPE': [
+            'identity.basic',
+            'identity.email',
+            'identity.team',
+            'identity.avatar',
+            'identity',
+        ],
+        'METHOD': 'oauth2',
+        'AUTH_PARAMS': {
+            'client_id': os.environ.get('SLACK_CLIENT_ID'),
+            'client_secret': os.environ.get('SLACK_CLIENT_SECRET'),
+        },
+        'VERIFIED_EMAIL': True,
+        'VERSION': 'v2.0',
+    }
+}
 
 # Database
 DATABASES = {

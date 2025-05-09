@@ -1,8 +1,12 @@
 from django.shortcuts import render
 from .models import User, Skill
 from .forms import UserForm
+from django.contrib.auth.decorators import login_required
 
+def landing_page(request):
+    return render(request, 'landing.html')
 
+@login_required
 def user_form_view(request):
     # Get the search query from the GET parameters (default to an empty string if not provided)
     query = request.GET.get('search', '')  # Get search query from the URL (GET parameter)
@@ -27,3 +31,6 @@ def user_form_view(request):
         'skills': skills,
         'query': query,  # Pass the query back to the template for the search box
     })
+
+
+

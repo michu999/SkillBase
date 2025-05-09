@@ -3,12 +3,12 @@ set -e
 
 # 1. Run migrations
 echo "Running migrations…"
-python manage.py makemigrations --noinput
-python manage.py migrate --fake-initial --noinput
+python3 manage.py makemigrations --noinput
+python3 manage.py migrate --fake-initial --noinput
 
 # preapre static files
 echo "Collecting static files…"
-python manage.py collectstatic
+python3 manage.py collectstatic --noinput
 
 # Check if DJANGO_DB_LOCATION is set and if the file exists
 if [ -n "$DJANGO_DB_LOCATION" ]; then
@@ -27,7 +27,7 @@ fi
 # 2. Create superuser if not exists
 if [ -n "$DJANGO_SUPERUSER_USERNAME" ] && [ -n "$DJANGO_SUPERUSER_PASSWORD" ] && [ -n "$DJANGO_SUPERUSER_EMAIL" ]; then
   echo "Checking for existing superuser…"
-  python manage.py shell <<EOF
+  python3 manage.py shell <<EOF
 from django.contrib.auth import get_user_model
 User = get_user_model()
 username = "$DJANGO_SUPERUSER_USERNAME"
