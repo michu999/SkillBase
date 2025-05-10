@@ -8,3 +8,4 @@ django-allauth==65.7.0
 requests==2.31.0
 django-extensions>=3.2.0
 werkzeug>=2.2.0
+pyOpenSSL>=23.0.0
