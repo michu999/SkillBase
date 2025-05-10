@@ -5,23 +5,24 @@ services:
     build: .
     ports:
       - "8000:8000"
+      - "8443:8443"  # HTTPS port
     volumes:
       - .:/app
       - ./static:/app/static
+      - ./certs:/app/certs  # Mount certificate directory
       - static_volume:/app/staticfiles
       - db_data:/app/data
+    env_file:
+      - .env
     environment:
       - DEBUG=1
-      - DJANGO_SECRET_KEY=your_secret_key_here
       - DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1
       - DJANGO_DB_ENGINE=django.db.backends.sqlite3
       - DJANGO_DB_LOCATION=/app/data/db.sqlite3
       - DJANGO_SUPERUSER_USERNAME=admin
       - DJANGO_SUPERUSER_PASSWORD=admin
       - DJANGO_SUPERUSER_EMAIL=admin@example.com
-      - SLACK_CLIENT_ID=your_slack_client_id
-      - SLACK_CLIENT_SECRET=your_slack_client_secret
-
-volumes:
-  static_volume:
-  db_data:
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py collectstatic --no-input &&
+             python manage.py runserver_plus --cert-file /app/certs/cert.pem --key-file /app/certs/key.pem 0.0.0.0:8443"
