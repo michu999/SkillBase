@@ -19,14 +19,16 @@ from django.urls import path, include
 from bot import views
 from django.shortcuts import render
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns #TODO REMOVE WHEN GOING LIVE
-
+from django.views.generic import RedirectView
 
 urlpatterns = [
-    path('', views.landing_page, name='landing.html'),
+    path('', views.landing_page, name='landing'),
     path('admin/', admin.site.urls),
-    path('user_form/', views.user_form_view, name='user_form.html'),
-    path('success/', lambda request: render(request, 'success.html'), name='success'),
+    path('user_form/', views.user_form_view, name='user_form'),
+    path('success/', lambda request: render(request, 'success'), name='success'),
     path('accounts/', include('allauth.urls')),
+    path('slack/login/', RedirectView.as_view(url='/accounts/slack/login/'), name='slack_login'),
 ]
+
 
 urlpatterns += staticfiles_urlpatterns()
