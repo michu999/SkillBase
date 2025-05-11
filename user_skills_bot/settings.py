@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.slack',
     'django_extensions',
-    'bot'
+    'bot.apps.BotConfig',
 ]
 
 SITE_ID = 1
@@ -66,10 +66,11 @@ MIDDLEWARE = [
 LOGIN_URL = '/accounts/slack/login/'
 ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/login/'
 
+# AllAuth settings
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']  # No username field
+ACCOUNT_LOGIN_METHODS = ['email']
 ACCOUNT_EMAIL_VERIFICATION = 'none'
-ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']
-ACCOUNT_LOGIN_METHODS = {'email', 'username'}
-ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']
+SOCIALACCOUNT_ADAPTER = 'bot.adapters.CustomSocialAccountAdapter'
 ACCOUNT_UNIQUE_EMAIL = True
 SOCIALACCOUNT_AUTO_SIGNUP = True
 
