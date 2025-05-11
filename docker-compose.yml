@@ -27,7 +27,6 @@ services:
              python manage.py collectstatic --no-input &&
              python manage.py runserver_plus --cert-file /app/certs/cert.pem --key-file /app/certs/key.pem 0.0.0.0:8443"
 
-# Add this volumes section
 volumes:
   static_volume:
   db_data:
