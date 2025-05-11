@@ -49,7 +49,7 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
-LOGIN_REDIRECT_URL = 'user_form/'
+LOGIN_REDIRECT_URL = '/user_form/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -97,19 +97,12 @@ WSGI_APPLICATION = 'user_skills_bot.wsgi.application'  # Change 'your_project' t
 SOCIALACCOUNT_PROVIDERS = {
     'slack': {
         'SCOPE': [
-            'identity.basic',
-            'identity.email',
-            'identity.team',
-            'identity.avatar',
-            'identity',
+            'openid',
+            'email',
+            'profile',
         ],
         'METHOD': 'oauth2',
-        'AUTH_PARAMS': {
-            'client_id': os.environ.get('SLACK_CLIENT_ID'),
-            'client_secret': os.environ.get('SLACK_CLIENT_SECRET'),
-        },
         'VERIFIED_EMAIL': True,
-        'VERSION': 'v2.0',
     }
 }
 
