@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Choose your city{% endblock %}
+
+{% block content %}
+<h1>Choose your city</h1>
+<form method="POST" action="">
+    {% csrf_token %}
+
+<div class="form-group">
+    <label for="city">Your City</label>
+    <input type="text" name="city" id="id_city" class="form-control" placeholder="Enter your city...">
+</div>
+
+    <button type="submit" class="btn btn-primary mt-3">Submit</button>
+</form>
+{% endblock content %}
