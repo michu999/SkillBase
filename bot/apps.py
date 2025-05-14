@@ -6,3 +6,4 @@ class BotConfig(AppConfig):
 
     def ready(self):
         import bot.signals  # Import signals when app is ready
+

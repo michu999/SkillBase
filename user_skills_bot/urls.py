@@ -24,6 +24,7 @@ from django.views.generic import RedirectView
 urlpatterns = [
     path('', views.landing_page, name='landing'),
     path('admin/', admin.site.urls),
+    path('city_form/', views.city_form_view, name='city_form'),
     path('user_form/', views.user_form_view, name='user_form'),
     path('success/', lambda request: render(request, 'success'), name='success'),
     path('accounts/', include('allauth.urls')),

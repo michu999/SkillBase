@@ -13,7 +13,7 @@ class User(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     skills = models.ManyToManyField(Skill, blank=True)
-    cities = models.ManyToManyField('City', blank=True)
+    city = models.ForeignKey('City', on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} ({self.auth_user.username}) - {self.email}"

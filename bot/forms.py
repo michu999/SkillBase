@@ -10,3 +10,11 @@ class UserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'skills']
+
+class CityForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['city']
+        widgets = {
+            'city': forms.TextInput(attrs={'class': 'form-control'}),
+        }

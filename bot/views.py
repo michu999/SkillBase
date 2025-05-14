@@ -1,10 +1,31 @@
-from django.shortcuts import render
-from .models import User, Skill
-from .forms import UserForm
+from django.shortcuts import render, redirect
+from .models import User, Skill, City
+from .forms import UserForm, CityForm
 from django.contrib.auth.decorators import login_required
+
 
 def landing_page(request):
     return render(request, 'landing.html')
+
+@login_required
+def city_form_view(request):
+    # Handle the POST request for the city form submission
+    if request.method == 'POST':
+        form = CityForm(request.POST)
+        if form.is_valid():
+            # Process the form data
+            city = form.cleaned_data['city']
+            # Do something with the city data, like saving to user's profile
+            # ...
+
+            # Redirect to another page after processing
+            return redirect('user_form')  # Replace 'user_form' with your actual URL name
+    else:
+        # For GET requests, display the form
+        form = CityForm()
+
+    # Always return a response
+    return render(request, 'city_form.html', {'form': form, 'cities': City.objects.all()})
 
 @login_required
 def user_form_view(request):
