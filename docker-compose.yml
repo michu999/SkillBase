@@ -25,8 +25,8 @@ services:
     command: >
       sh -c "python manage.py migrate &&
              python manage.py collectstatic --no-input &&
-             python manage.py runserver_plus --cert-file /app/certs/cert.pem --key-file /app/certs/key.pem 0.0.0.0:8443"
-
+             python manage.py runserver_plus --cert-file /app/certs/cert.pem --key-file /app/certs/key.pem 0.0.0.0:8443
+             command: python manage.py runserver 0.0.0.0:8000"
 volumes:
   static_volume:
   db_data:
