@@ -18,7 +18,8 @@
             <ul class="list-group">
                 {% for skill in skills %}
                     <li class="list-group-item bg-dark text-light">
-                        <input type="checkbox" name="skills" value="{{ skill.id }}" id="id_skills_{{ skill.id }}">
+                        <input type="checkbox" name="skills" value="{{ skill.id }}" id="id_skills_{{ skill.id }}"
+                               {% if skill in user_skills %}checked{% endif %}>
                         <label for="id_skills_{{ skill.id }}">{{ skill.name }}</label>
                     </li>
                 {% endfor %}

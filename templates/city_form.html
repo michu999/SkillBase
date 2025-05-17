@@ -3,15 +3,9 @@
 
 {% block content %}
 <h1>Choose your city</h1>
-<form method="POST" action="">
+<form method="post" action="{% url 'city_form' %}">
     {% csrf_token %}
-
-<div class="form-group">
-    <label for="city">Your City</label>
-    <input type="text" name="city" id="id_city" class="form-control" placeholder="Enter your city...">
-</div>
-
-    <button type="submit" class="btn btn-primary mt-3">Submit</button>
-    <a href="{% url 'user_form' %}" class="btn btn-outline-info mt-3 ms-2">Back to Skills</a>
+    {{ form.city_name }}
+    <button type="submit" class="btn btn-primary">Save City & Continue</button>
 </form>
 {% endblock content %}

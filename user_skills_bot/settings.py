@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.slack',
     'django_extensions',
     'bot.apps.BotConfig',
+    'rest_framework',
 ]
 
 SITE_ID = 1

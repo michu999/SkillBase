@@ -20,6 +20,11 @@ from bot import views
 from django.shortcuts import render
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns #TODO REMOVE WHEN GOING LIVE
 from django.views.generic import RedirectView
+from bot.views import UserViewSet
+from rest_framework.routers import DefaultRouter
+
+router = DefaultRouter()
+router.register(r'users', UserViewSet)
 
 urlpatterns = [
     path('', views.landing_page, name='landing'),
@@ -29,6 +34,7 @@ urlpatterns = [
     path('success/', lambda request: render(request, 'success'), name='success'),
     path('accounts/', include('allauth.urls')),
     path('slack/login/', RedirectView.as_view(url='/accounts/slack/login/'), name='slack_login'),
+    path('api/', include(router.urls)),
 ]
 
 

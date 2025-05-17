@@ -10,13 +10,12 @@ class Skill(models.Model):
 class User(models.Model):
     auth_user = models.OneToOneField(AuthUser, on_delete=models.CASCADE)
     email = models.EmailField(blank=True)
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
+    user_id = models.CharField(max_length=50, blank=True)
     skills = models.ManyToManyField(Skill, blank=True)
     city = models.ForeignKey('City', on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name} ({self.auth_user.username}) - {self.email}"
+        return f"{self.email} {self.user_id} ({self.auth_user.username}) - {self.city}"
 
 class City(models.Model):
     name = models.CharField(max_length=100)
