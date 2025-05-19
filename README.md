@@ -1,4 +1,4 @@
-# User Skills Bot
+# User Skills Bot (TODO update README.md)
 
 A Django web application where users can register, select multiple skills, and search for skills easily.
 
