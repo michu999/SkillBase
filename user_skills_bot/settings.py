@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.slack',
     'django_extensions',
     'bot.apps.BotConfig',
+    'slack_integration',
     'rest_framework',
 ]
 
@@ -154,3 +155,6 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Slack settings
+SLACK_BOT_TOKEN = os.environ.get('SLACK_BOT_TOKEN', '')
