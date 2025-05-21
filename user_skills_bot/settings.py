@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.slack',
     'django_extensions',
     'bot.apps.BotConfig',
-    'slack_integration',
+    'slack_integration.apps.SlackIntegrationConfig',
     'rest_framework',
 ]
 

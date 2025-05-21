@@ -5,6 +5,8 @@ from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets
 from .models import User
 from .serializers import UserSerializer
+from slack_integration.signals import update_slack_profile
+
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -48,6 +50,15 @@ def city_form_view(request):
 
 @login_required
 def user_form_view(request):
+    from django.db.models.signals import m2m_changed, post_save
+    from bot.models import User
+
+    # Check if signals are registered
+    m2m_receivers = m2m_changed._live_receivers(sender=User.skills.through)
+    save_receivers = post_save._live_receivers(sender=User)
+
+    print(f"Signal m2m receivers count: {len(m2m_receivers)}")
+    print(f"Signal post_save receivers count: {len(save_receivers)}")
     # Get or create user profile for the current logged-in user
     user_profile, created = User.objects.get_or_create(auth_user=request.user)
 
@@ -99,6 +110,10 @@ def user_form_view(request):
             user = form.save(commit=False)
             user.save()
 
+            # Update the user profile with the selected skills
+            from slack_integration.signals import update_slack_profile
+            update_slack_profile(user_profile)
+
             # Now update the many-to-many relationship
             user.skills.clear()
             user.skills.add(*selected_skills)
@@ -121,3 +136,20 @@ def user_form_view(request):
         'query': query,
         'user_skills': user_profile.skills.all(),
     })
+
+def update_user_profile(request):
+    if request.method == "POST":
+        user = request.user  # Get the logged-in user
+        skills = request.POST.getlist("skills")  # Get updated skills
+        city_id = request.POST.get("city")  # Get updated city
+
+        # Update user's skills
+        user.skills.set(Skill.objects.filter(id__in=skills))
+
+        # Update user's city
+        if city_id:
+            user.city = City.objects.get(id=city_id)
+        user.save()
+
+        # The signal will handle the Slack update automatically
+        return redirect("profile")
