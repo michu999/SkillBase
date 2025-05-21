@@ -1,5 +1,6 @@
 import logging
 import requests
+import time
 from django.conf import settings
 
 logger = logging.getLogger(__name__)
@@ -46,9 +47,12 @@ class SlackProfileService:
             if response.status_code == 200 and response_data.get("ok"):
                 logger.info(f"Updated profile for user {user_id}")
                 return True
-            else:
-                logger.error(f"Failed to update profile: {response_data}")
-                return False
+
+            elif response.status_code == 429: #Rate limit error
+                retry_after = response_data.get("headers", {}).get("Retry-After")
+                logger.warning(f"Rate limit exceeded. Retry after {retry_after} seconds.")
+                time.sleep(retry_after)
+
         except Exception as e:
             logger.exception(f"Error updating Slack profile: {e}")
             return False
