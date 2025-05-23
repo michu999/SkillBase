@@ -5,7 +5,7 @@
 <h1>Choose your city</h1>
 <form method="post" action="{% url 'city_form' %}">
     {% csrf_token %}
-    {{ form.city_name }}
-    <a href="{% url 'section_form' %}" class="btn btn-outline-info mt-2 ms-2">Save city and continue</a>
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Save City and choose your Section</button>
 </form>
 {% endblock content %}

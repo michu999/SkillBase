@@ -14,40 +14,33 @@ logger = logging.getLogger(__name__)
 def update_slack_profile(instance):
     """Update Slack profile with user's skills and city."""
     logger.info(f"==== SIGNAL TRIGGERED: update_slack_profile for user_id: {instance.id} ====")
-    print(f"==== SIGNAL TRIGGERED: update_slack_profile for user_id: {instance.id} ====")
 
-    user_id = instance.user_id  # Slack user ID
+    # Debug the actual values to see what's in the database
+    logger.info(
+        f"User data: id={instance.id}, user_id={instance.user_id}, slack_id={getattr(instance, 'slack_id', 'N/A')}")
 
-    if not user_id:
-        logger.warning(f"User {instance.id} has no Slack user_id")
-        print(f"User {instance.id} has no Slack user_id")
-        return
+    # Check where the Slack ID is actually stored
+    # Try other potential attribute names
+    slack_user_id = instance.user_id or getattr(instance, 'slack_id', None) or getattr(instance, 'slack_user_id', None)
 
-    skills = [skill.name for skill in instance.skills.all()]  # List of skill names
-    city = instance.city.name if instance.city else ""  # City name
+    if not slack_user_id:
+        logger.warning(f"User {instance.id} has no Slack user_id - check data in admin panel")
+        return False
+
+    # Use the correct variable for the rest of the function
+    skills = [skill.name for skill in instance.skills.all()]
+    city = instance.city.name if instance.city else ""
     section = instance.section.name if instance.section else ""
-
-    logger.info(f"Updating Slack profile with data:")
-    logger.info(f"User ID: {user_id}")
-    logger.info(f"Skills: {skills}")
-    logger.info(f"City: {city}")
-
-    print(f"Updating Slack profile with data:")
-    print(f"User ID: {user_id}")
-    print(f"Skills: {skills}")
-    print(f"City: {city}")
-    print(f"Section: {section}")
 
     slack_service = SlackProfileService()
     result = slack_service.update_user_profile(
-        user_id=user_id,
+        user_id=slack_user_id,  # Use the correct variable
         skills=skills,
         city=city,
         section=section
     )
 
-    logger.info(f"Slack update result: {result}")
-    print(f"Slack update result: {result}")
+    return result
 
 
 # Signal for ManyToMany changes (skills)
@@ -64,6 +57,8 @@ def skills_changed(sender, instance, action, **kwargs):
 @receiver(post_save, sender=User)
 def user_saved(sender, instance, created, **kwargs):
     """Trigger when User model is saved (including city updates)."""
+    # Check if this is a recursive call from within update_slack_profile
+    if getattr(instance, '_updating_slack', False):
+        return
     logger.info(f"SIGNAL: post_save detected for User {instance.id}, created={created}")
-    print(f"SIGNAL: post_save detected for User {instance.id}, created={created}")
     update_slack_profile(instance)

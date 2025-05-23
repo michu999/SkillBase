@@ -15,25 +15,24 @@ def landing_page(request):
 
 @login_required
 def section_view(request):
-    # Get the user's profile
     user_profile, created = User.objects.get_or_create(auth_user=request.user)
 
     if request.method == 'POST':
         form = SectionForm(request.POST)
         if form.is_valid():
-            # Get the section from form data
-            section_id = form.cleaned_data.get('section')
-            user_profile.section_id = section_id
+            # Add debug logging
+            print(f"Form is valid, data: {form.cleaned_data}")
+
+            section = form.cleaned_data['section']
+            user_profile.section = section
             user_profile.save()
 
-            # Explicitly update the Slack profile
-            from slack_integration.signals import update_slack_profile
-            update_slack_profile(user_profile)
-
             return redirect('success')
+        else:
+            # Log validation errors
+            print(f"Form validation errors: {form.errors}")
     else:
-        # For GET requests, create a new form with initial data
-        initial = {'section': user_profile.section_id} if user_profile.section else {}
+        initial = {'section': user_profile.section.id} if user_profile.section else {}
         form = SectionForm(initial=initial)
 
     return render(request, 'section_form.html', {'form': form})
@@ -60,7 +59,7 @@ def city_form_view(request):
             print(f"Updated city to: {city.name}")
 
             # Redirect to user form
-            return redirect('user_form')
+            return redirect('section_form')
     else:
         # For GET requests, create a new form
         form = CityForm()
