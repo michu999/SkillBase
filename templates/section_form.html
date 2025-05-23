@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Choose your section{% endblock %}
+
+{% block content %}
+<h1>Choose your section</h1>
+<form method="post" action="{% url 'section_form' %}">
+    {% csrf_token %}
+    {{ form.section }}
+    <a href="{% url 'success' %}" class="btn btn-outline-info mt-2 ms-2">Save section</a>
+</form>
+{% endblock content %}

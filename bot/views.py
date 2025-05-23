@@ -1,9 +1,8 @@
 from django.shortcuts import render, redirect
-from .models import User, Skill, City
-from .forms import UserForm, CityForm
+from .models import User, Skill, City, Section
+from .forms import UserForm, CityForm, SectionForm
 from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets
-from .models import User
 from .serializers import UserSerializer
 from slack_integration.signals import update_slack_profile
 
@@ -14,6 +13,30 @@ class UserViewSet(viewsets.ModelViewSet):
 def landing_page(request):
     return render(request, 'landing.html')
 
+@login_required
+def section_view(request):
+    # Get the user's profile
+    user_profile, created = User.objects.get_or_create(auth_user=request.user)
+
+    if request.method == 'POST':
+        form = SectionForm(request.POST)
+        if form.is_valid():
+            # Get the section from form data
+            section_id = form.cleaned_data.get('section')
+            user_profile.section_id = section_id
+            user_profile.save()
+
+            # Explicitly update the Slack profile
+            from slack_integration.signals import update_slack_profile
+            update_slack_profile(user_profile)
+
+            return redirect('success')
+    else:
+        # For GET requests, create a new form with initial data
+        initial = {'section': user_profile.section_id} if user_profile.section else {}
+        form = SectionForm(initial=initial)
+
+    return render(request, 'section_form.html', {'form': form})
 
 @login_required
 def city_form_view(request):
@@ -153,3 +176,6 @@ def update_user_profile(request):
 
         # The signal will handle the Slack update automatically
         return redirect("profile")
+
+def success(request):
+    return render(request, 'success.html')

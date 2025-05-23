@@ -25,6 +25,7 @@ def update_slack_profile(instance):
 
     skills = [skill.name for skill in instance.skills.all()]  # List of skill names
     city = instance.city.name if instance.city else ""  # City name
+    section = instance.section.name if instance.section else ""
 
     logger.info(f"Updating Slack profile with data:")
     logger.info(f"User ID: {user_id}")
@@ -35,12 +36,14 @@ def update_slack_profile(instance):
     print(f"User ID: {user_id}")
     print(f"Skills: {skills}")
     print(f"City: {city}")
+    print(f"Section: {section}")
 
     slack_service = SlackProfileService()
     result = slack_service.update_user_profile(
         user_id=user_id,
         skills=skills,
-        city=city
+        city=city,
+        section=section
     )
 
     logger.info(f"Slack update result: {result}")

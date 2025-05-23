@@ -11,7 +11,7 @@ class SlackProfileService:
         self.base_url = "https://slack.com/api"
         self.token = settings.SLACK_BOT_TOKEN
 
-    def update_user_profile(self, user_id, skills, city):
+    def update_user_profile(self, user_id, skills, city, section):
         """Update a user's Slack profile with their skills and city."""
         if not user_id:
             logger.error("Cannot update profile: No user_id provided")
@@ -25,8 +25,12 @@ class SlackProfileService:
                         "value": ", ".join(skills) if skills else "",
                         "alt": ""
                     },
-                    "Xf08PMME6KJS": {  # City field ID
+                    "Xf03VBLQB0TA": {  # City field ID
                         "value": city if city else "",
+                        "alt": ""
+                    },
+                    "Xf08PMME6KJS": {  #Section field ID
+                        "value": section if section else "",
                         "alt": ""
                     }
                 }

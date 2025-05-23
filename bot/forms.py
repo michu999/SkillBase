@@ -1,5 +1,5 @@
 from django import forms
-from .models import User, City
+from .models import User, City, Section
 
 class UserForm(forms.ModelForm):
     class Meta:
@@ -19,5 +19,9 @@ class CityForm(forms.Form):
             raise forms.ValidationError("City name is required.")
         return city_name
 
-
-
+class SectionForm(forms.Form):
+    section = forms.ModelChoiceField(
+        queryset=Section.objects.all(),
+        empty_label="Select a section",
+        widget=forms.Select(attrs={'class': 'form-control', 'required': True})
+    )
