@@ -35,6 +35,7 @@ urlpatterns = [
     path('success/', views.success, name='success'),
     path('accounts/', include('allauth.urls')),
     path('slack/login/', RedirectView.as_view(url='/accounts/slack/login/'), name='slack_login'),
+    path('api/slack/skills/', views.slack_skill_search, name='slack_skill_search'),
     path('api/', include(router.urls)),
 ]
 

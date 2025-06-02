@@ -5,6 +5,9 @@ from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets
 from .serializers import UserSerializer
 from slack_integration.signals import update_slack_profile
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -178,3 +181,67 @@ def update_user_profile(request):
 
 def success(request):
     return render(request, 'success.html')
+
+@csrf_exempt
+def slack_skill_search(request):
+    if request.method == "POST":
+        # Extract data from Slack's request
+        slack_data = request.POST
+
+        # Get the text after the slash command
+        search_text = slack_data.get('text', '').strip()
+
+        if not search_text:
+            return JsonResponse({
+                "response_type": "ephemeral",
+                "text": "Please provide a skill to search for. Usage: /findskill python"
+            })
+
+        # Find users with the requested skill
+        try:
+            skill = Skill.objects.get(name__iexact=search_text)
+            users = User.objects.filter(skills=skill)
+
+            if users:
+                # Format the response
+                blocks = [
+                    {
+                        "type": "section",
+                        "text": {
+                            "type": "mrkdwn",
+                            "text": f"*Users with {skill.name} skill:*"
+                        }
+                    }
+                ]
+
+                for user in users:
+                    # Format user info with their skills, city, section
+                    city = user.city.name if user.city else "No city"
+                    section = user.section.name if user.section else "No section"
+                    user_skills = ", ".join([s.name for s in user.skills.all()[:5]])
+
+                    blocks.append({
+                        "type": "section",
+                        "text": {
+                            "type": "mrkdwn",
+                            "text": f"*<@{user.user_id}>*\n• *Skills:* {user_skills}\n• *City:* {city}\n• *Section:* {section}"
+                        }
+                    })
+
+                return JsonResponse({
+                    "response_type": "in_channel",
+                    "blocks": blocks
+                })
+            else:
+                return JsonResponse({
+                    "response_type": "ephemeral",
+                    "text": f"No users found with skill: {search_text}"
+                })
+
+        except Skill.DoesNotExist:
+            return JsonResponse({
+                "response_type": "ephemeral",
+                "text": f"Skill '{search_text}' not found in the database"
+            })
+
+    return JsonResponse({"error": "Invalid request"}, status=400)
