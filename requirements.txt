@@ -6,6 +6,7 @@ cryptography==44.0.3
 Django==5.2
 django-allauth==65.7.0
 django-extensions==4.1
+djangorestframework==3.16.0
 gunicorn==23.0.0
 idna==3.10
 load-dotenv==0.1.0

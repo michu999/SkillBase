@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'bot.apps.BotConfig',
     'slack_integration.apps.SlackIntegrationConfig',
+    'rest_framework',
 ]
 
 SITE_ID = 1
