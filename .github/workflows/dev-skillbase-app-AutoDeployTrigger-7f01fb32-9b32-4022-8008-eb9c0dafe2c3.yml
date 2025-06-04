@@ -5,7 +5,7 @@ on:
   # Automatically trigger it when detected changes in repo
   push:
     branches: 
-      [ main ]
+      [ dev ]
     paths:
     - '**'
     - '.github/workflows/dev-skillbase-app-AutoDeployTrigger-7f01fb32-9b32-4022-8008-eb9c0dafe2c3.yml'
