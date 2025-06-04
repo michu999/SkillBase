@@ -1,0 +1,48 @@
+name: Trigger auto deployment for prod-skillbase-app
+
+# When this action will be executed
+on:
+  # Automatically trigger it when detected changes in repo
+  push:
+    branches: 
+      [ main ]
+    paths:
+    - '**'
+    - '.github/workflows/prod-skillbase-app-AutoDeployTrigger-d689f69b-4e7b-4279-ac84-e07b67508020.yml'
+
+  # Allow manual trigger 
+  workflow_dispatch:      
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions: 
+      id-token: write #This is required for requesting the OIDC JWT Token
+      contents: read #Required when GH token is used to authenticate with private repo
+
+    steps:
+      - name: Checkout to the branch
+        uses: actions/checkout@v2
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.PRODSKILLBASEAPP_AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.PRODSKILLBASEAPP_AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.PRODSKILLBASEAPP_AZURE_SUBSCRIPTION_ID }}
+
+      - name: Build and push container image to registry
+        uses: azure/container-apps-deploy-action@v2
+        with:
+          appSourcePath: ${{ github.workspace }}
+          _dockerfilePathKey_: _dockerfilePath_
+          registryUrl: 
+          registryUsername: ${{ secrets.PRODSKILLBASEAPP_REGISTRY_USERNAME }}
+          registryPassword: ${{ secrets.PRODSKILLBASEAPP_REGISTRY_PASSWORD }}
+          containerAppName: prod-skillbase-app
+          resourceGroup: rg-swedencentral-prod-skillbase-app
+          imageToBuild: default/[parameters('containerAppName')]:${{ github.sha }}
+          _buildArgumentsKey_: |
+            _buildArgumentsValues_
+
+
