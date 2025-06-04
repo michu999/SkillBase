@@ -17,7 +17,7 @@ allowed_hosts = os.environ.get('DJANGO_ALLOWED_HOSTS', '')
 ALLOWED_HOSTS = [host.strip() for host in allowed_hosts.split(',') if host.strip()]
 
 csrf_trusted_origins = os.environ.get('DJANGO_CSRF_TRUSTED_ORIGINS', '')
-DJANGO_CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in csrf_trusted_origins.split(',') if origin.strip()]
+CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in csrf_trusted_origins.split(',') if origin.strip()]
 
 # Application definition
 INSTALLED_APPS = [
@@ -34,7 +34,6 @@ INSTALLED_APPS = [
     'django_extensions',
     'bot.apps.BotConfig',
     'slack_integration.apps.SlackIntegrationConfig',
-    'rest_framework',
 ]
 
 SITE_ID = 1
