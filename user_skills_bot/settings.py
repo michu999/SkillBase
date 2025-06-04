@@ -10,15 +10,12 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'unsafe-secret-key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
-ALLOWED_HOSTS = [
-    'skillbase.smartoakprojects.com',
-    'dev-skillbase-app.kindsea-24ff6f10.swedencentral.azurecontainerapps.io',
-    ]
+allowed_hosts = os.environ.get('DJANGO_ALLOWED_HOSTS', '')
+ALLOWED_HOSTS = [host.strip() for host in allowed_hosts.split(',') if host.strip()]
 
-CSRF_TRUSTED_ORIGINS = [
-    'https://skillbase.smartoakprojects.com',
-    'https://dev-skillbase-app.kindsea-24ff6f10.swedencentral.azurecontainerapps.io'
-]
+
+CSRF_TRUSTED_ORIGINS = ['https://' + origin if not origin.startswith(('http://', 'https://')) else origin
+                      for origin in CSRF_TRUSTED_ORIGINS]
 
 # Application definition
 INSTALLED_APPS = [
