@@ -8,20 +8,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'unsafe-secret-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
 ALLOWED_HOSTS = [
-    'localhost',
     'skillbase.smartoakprojects.com',
     'dev-skillbase-app.kindsea-24ff6f10.swedencentral.azurecontainerapps.io',
-    '127.0.0.1',
-    '127.0.0.1:8000',
-    '*' # Allow all hosts for development purposes DEV ONLY!!!
     ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'http://localhost',
-    'https://localhost',
     'https://skillbase.smartoakprojects.com',
     'https://dev-skillbase-app.kindsea-24ff6f10.swedencentral.azurecontainerapps.io'
 ]
@@ -101,7 +95,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'user_skills_bot.wsgi.application'  # Change 'your_project' to your project name
+WSGI_APPLICATION = 'user_skills_bot.wsgi.application'
 
 SOCIALACCOUNT_PROVIDERS = {
     'slack': {
